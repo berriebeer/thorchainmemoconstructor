@@ -1,7 +1,7 @@
 {
-  "extends": "next/core-web-configs",
+  "extends": "next/core-web-config",
   "rules": {
-    "react/no-unescaped-entities": "off",
+    "react/no-unescaped-entities": 0,
     "@typescript-eslint/no-empty-interface": "off"
   }
 }

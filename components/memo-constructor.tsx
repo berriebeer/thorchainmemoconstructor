@@ -148,7 +148,7 @@ export function MemoConstructor() {
               : "Send RUNE through the FUNCTION 'Custom' in Vultisig with this memo")
             : (
               <>
-                <p>Withdraw liquidity from the {getAssetName(selectedAsset)} pool. Make sure to do the transaction from the RUNE address that you've provided the initial liquidity with.</p>
+                <p>Withdraw liquidity from the {getAssetName(selectedAsset)} pool. Make sure to do the transaction from the RUNE address that you have provided the initial liquidity with.</p>
                 <p className="mt-2 font-semibold">Note: If you deposit asymmetrically you can ONLY withdraw asymmetrically.</p>
               </>
             )
