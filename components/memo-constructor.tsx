@@ -30,6 +30,14 @@ const donationAddresses = {
   'RUNE': 'thor1xnam06nqut9ns8d7eqm7h2uhmqd8hagjv5chkp'
 }
 
+// Add this interface above the MemoConstructor function
+interface InboundAddress {
+  chain: string;
+  address: string;
+  router?: string;
+  halted?: boolean;
+}
+
 export function MemoConstructor() {
   const [action, setAction] = useState('add')
   const [selectedAsset, setSelectedAsset] = useState('')
@@ -50,9 +58,9 @@ export function MemoConstructor() {
         if (!response.ok) {
           throw new Error('Failed to fetch inbound addresses')
         }
-        const data = await response.json()
-        const addressMap = {}
-        data.forEach(item => {
+        const data: InboundAddress[] = await response.json()
+        const addressMap: Record<string, { address: string }> = {}
+        data.forEach((item: InboundAddress) => {
           addressMap[item.chain] = {
             address: item.address,
           }
