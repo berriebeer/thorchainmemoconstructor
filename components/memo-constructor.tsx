@@ -24,7 +24,7 @@ const assets = [
   { id: 'RUNE', name: 'Thorchain (RUNE)', shortName: 'r', chainAsset: 'THOR.RUNE' }
 ]
 
-const donationAddresses = {
+const donationAddresses: Record<'BTC' | 'ETH' | 'RUNE', string> = {
   'BTC': 'bc1qunw4qr844g3qg306lymmnylnv3l7vees53vpna',
   'ETH': '0x7dD4059b83A9A0C24F0d358B5D751Fd6b1e8C101',
   'RUNE': 'thor1xnam06nqut9ns8d7eqm7h2uhmqd8hagjv5chkp'
@@ -38,18 +38,24 @@ interface InboundAddress {
   halted?: boolean;
 }
 
+interface InboundAddressMap {
+  [key: string]: {
+    address: string;
+  }
+}
+
 export function MemoConstructor() {
   const [action, setAction] = useState('add')
   const [selectedAsset, setSelectedAsset] = useState('')
   const [assetAddress, setAssetAddress] = useState('')
   const [runeAddress, setRuneAddress] = useState('')
-  const [inboundAddresses, setInboundAddresses] = useState({})
+  const [inboundAddresses, setInboundAddresses] = useState<InboundAddressMap>({})
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
   const [basisPoints, setBasisPoints] = useState(10000)
   const [withdrawalType, setWithdrawalType] = useState('both')
-  const [donationAsset, setDonationAsset] = useState('RUNE')
-  const [copiedStates, setCopiedStates] = useState({})
+  const [donationAsset, setDonationAsset] = useState<keyof typeof donationAddresses>('RUNE')
+  const [copiedStates, setCopiedStates] = useState<Record<string, boolean>>({})
 
   useEffect(() => {
     const fetchInboundAddresses = async () => {
@@ -67,8 +73,8 @@ export function MemoConstructor() {
         })
         setInboundAddresses(addressMap)
         setLoading(false)
-      } catch (err) {
-        setError(err.message)
+      } catch (err: any) {
+        setError(err?.message || 'An error occurred')
         setLoading(false)
       }
     }
@@ -355,7 +361,10 @@ export function MemoConstructor() {
             <span className="text-sm text-gray-400 font-medium">Buy me a coffee</span>
           </div>
           <div className="flex flex-col sm:flex-row items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full">
-            <Select onValueChange={setDonationAsset} value={donationAsset}>
+            <Select 
+              onValueChange={(value: keyof typeof donationAddresses) => setDonationAsset(value)} 
+              value={donationAsset}
+            >
               <SelectTrigger className="w-full sm:w-[120px] bg-[#1a1f2a] border-gray-700">
                 <SelectValue placeholder="Select asset" />
               </SelectTrigger>
